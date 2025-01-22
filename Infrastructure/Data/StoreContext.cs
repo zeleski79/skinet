@@ -9,6 +9,7 @@ namespace Infrastructure.Data
     {
         public DbSet<Product> Products { get; set; } // Products will be used as DB table name !
         public DbSet<Address> Adresses { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
