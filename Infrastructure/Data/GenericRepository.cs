@@ -51,11 +51,6 @@ namespace Infrastructure.Data
             context.Set<T>().Remove(entity);
         }
 
-        public async Task<bool> SaveAllAsync()
-        {
-            return await context.SaveChangesAsync() > 0;
-        }
-
         public async Task<int> CountAsync(ISpecification<T> spec)
         {
             var query = context.Set<T>().AsQueryable();

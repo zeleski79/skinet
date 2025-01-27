@@ -5,9 +5,7 @@ using Stripe;
 
 namespace Infrastructure.Services;
 
-public class PaymentService(IConfiguration config, ICartService cartService,
-        IGenericRepository<Core.Entities.Product> productRepo, 
-        IGenericRepository<DeliveryMethod> dmRepo) : IPaymentService
+public class PaymentService(IConfiguration config, ICartService cartService, IUnitOfWork uow) : IPaymentService
 {
     public async Task<ShoppingCart?> CreateOrUpdatePaymentIntent(string cartId) {
         StripeConfiguration.ApiKey = config["StripeSettings:SecretKey"]; // Get the key from the confg file
@@ -15,13 +13,13 @@ public class PaymentService(IConfiguration config, ICartService cartService,
         if (cart == null) return null; // We don't find the cart
         var shippingPrice = 0m; // Decimal
         if (cart.DeliveryMethodId.HasValue) {
-            var deliveryMethod = await dmRepo.GetByIdAsync((int)cart.DeliveryMethodId);
+            var deliveryMethod = await uow.Repository<DeliveryMethod>().GetByIdAsync((int)cart.DeliveryMethodId);
             if (deliveryMethod == null) return null; // We don't find the dm in DB
             shippingPrice = deliveryMethod.Price;
         }
         // Refresh the prices (replace cart prices with prices coming from DB for security reason)
         foreach (var item in cart.Items) {
-            var productItem = await productRepo.GetByIdAsync(item.ProductId);
+            var productItem = await uow.Repository<Core.Entities.Product>().GetByIdAsync(item.ProductId);
             if (productItem == null) return null; // We don't find the product in DB
             if (item.Price != productItem.Price) {
                 item.Price = productItem.Price;

@@ -7,6 +7,10 @@ namespace Core.Interfaces
         Expression<Func<T, bool>>? Criteria { get; } // To use as a where clause (search)
         Expression<Func<T, object>>? OrderBy { get; } // To use as a order by
         Expression<Func<T, object>>? OrderByDesc { get; } // To use as a order by desc
+
+        List<Expression<Func<T, object>>> Includes {get; } // For eager Loading
+        List<string> IncludeStrings {get; } // For ThenInclude
+
         bool IsDistinct { get; } 
         int Take { get; }
         int Skip { get; }
