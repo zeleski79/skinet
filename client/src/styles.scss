@@ -13,12 +13,12 @@ $customTheme: mat.define-theme();
 
     // override the button styles
     .mdc-button, .mdc-raised-button, .mdc-stroked-button, .mdc-flat-button {
-        @apply rounded-md;
+        @apply rounded-md
     }
 }
 
 .container {
-    @apply mx-3 max-w-screen-2xl;
+    @apply mx-auto max-w-screen-2xl
 }
 
 .text-primary {
