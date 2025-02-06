@@ -14,7 +14,7 @@ import { CheckoutDeliveryComponent } from "./checkout-delivery/checkout-delivery
 import { CheckoutReviewComponent } from "./checkout-review/checkout-review.component";
 import { CartService } from '../../core/services/cart.service';
 import { CurrencyPipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { OrderToCreate, ShippingAddress } from '../../shared/models/order';
 import { OrderService } from '../../core/services/order.service';
@@ -22,7 +22,7 @@ import { OrderService } from '../../core/services/order.service';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [OrderSummaryComponent, MatStepperModule, MatButton, MatCheckboxModule, CheckoutDeliveryComponent, CheckoutReviewComponent, CurrencyPipe, MatProgressSpinnerModule],
+  imports: [OrderSummaryComponent, MatStepperModule, MatButton, MatCheckboxModule, CheckoutDeliveryComponent, CheckoutReviewComponent, CurrencyPipe, MatProgressSpinnerModule, RouterLink],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
