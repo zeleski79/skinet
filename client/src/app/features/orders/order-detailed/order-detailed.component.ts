@@ -8,6 +8,7 @@ import { CurrencyPipe, DatePipe } from '@angular/common';
 import { AddressPipe } from "../../../shared/pipes/address.pipe";
 import { PaymentCardPipe } from "../../../shared/pipes/payment-card.pipe";
 import { AccountService } from '../../../core/services/account.service';
+import { AdminService } from '../../../core/services/admin.service';
 
 @Component({
   selector: 'app-order-detailed',
@@ -26,16 +27,20 @@ import { AccountService } from '../../../core/services/account.service';
 })
 export class OrderDetailedComponent implements OnInit {
   private orderService = inject(OrderService);
+  private accountService = inject(AccountService);
+  private adminService = inject(AdminService);
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   order?: Order;
-  buttonText = 'Return to orders'
+  buttonText = this.accountService.isAdmin()?'Return to Admin':'Return to orders';
 
   ngOnInit(): void {
     this.loadOrder();
   }
 
   onReturnClick() {
+    this.accountService.isAdmin()?
+    this.router.navigateByUrl('/admin'):
     this.router.navigateByUrl('/orders')
   }
 
@@ -43,7 +48,9 @@ export class OrderDetailedComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (!id) return;
 
-    const loadOrderData = this.orderService.getOrderDetailed(+id);
+    const loadOrderData = this.accountService.isAdmin()?
+    this.adminService.getOrder(+id):
+    this.orderService.getOrderDetailed(+id);
 
     loadOrderData.subscribe({
       next: order => this.order = order
