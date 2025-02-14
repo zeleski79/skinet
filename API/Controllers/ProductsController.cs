@@ -9,6 +9,7 @@ namespace API.Controllers
 {
     public class ProductsController(IUnitOfWork uow) : BaseApiController
     {
+        [Cache(600)]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts([FromQuery] ProductSpecParams specParams)
         {
@@ -16,6 +17,7 @@ namespace API.Controllers
             return await CreatePagedResult(uow.Repository<Product>(), spec, specParams.PageIndex, specParams.PageSize);
         }
 
+        [Cache(600)]
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
@@ -24,6 +26,7 @@ namespace API.Controllers
             return product;
         }
 
+        [InvalidateCache("api/products|")]
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
@@ -36,6 +39,7 @@ namespace API.Controllers
             return BadRequest("Error creating product");
         }
 
+        [InvalidateCache("api/products|")]
         [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateProduct(int id, Product product)
@@ -51,6 +55,7 @@ namespace API.Controllers
             return BadRequest("Problem updating product");
         }
 
+        [InvalidateCache("api/products|")]
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteProduct(int id)
@@ -65,6 +70,7 @@ namespace API.Controllers
             return BadRequest("Problem deleting product");
         }
 
+        [Cache(600)]
         [HttpGet("types")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetTypes()
         {
@@ -72,6 +78,7 @@ namespace API.Controllers
             return Ok(await uow.Repository<Product>().ListAsyncWithSpec(spec));
         }
 
+        [Cache(600)]
         [HttpGet("brands")]
         public async Task<ActionResult<IReadOnlyList<string>>> GetBrands()
         {
